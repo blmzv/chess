@@ -1,0 +1,17 @@
+.board {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    
+    width: 400px;
+    height: 400px;
+
+    font-size: 100fr;
+}
+.board > div {
+    display: contents;
+}
+.board > div:nth-child(2n) > div:nth-child(2n),
+.board > div:nth-child(2n +1 ) > div:nth-child(2n +1) {
+    background-color: grey;
+    border-radius: 2px;
+}

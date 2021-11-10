@@ -1,0 +1,13 @@
+.cell {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+.cell.marks {
+    border: 2px solid red;
+}
+.cell > * {
+    position: absolute;
+    display: block;
+}

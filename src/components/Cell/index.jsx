@@ -4,8 +4,8 @@ import Figure from '../Figure';
 import style from './index.module.css';
 
 
-const Cell = ({ figure, marks }) =>
-    <div className={`${style.cell} ${marks && style.marks}`}>
+const Cell = ({ figure, marks, onClick }) =>
+    <div className={`${style.cell} ${marks && style.marks}`} onClick={() => onClick(figure)}>
         {figure && <Figure {...figure} />}
     </div>;
  

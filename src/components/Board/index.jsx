@@ -4,7 +4,7 @@ import Row from '../Row';
 import style from './index.module.css';
 
 
-const Bord = ({ length = 8, figures = [], marks = [] }) =>
+const Bord = ({ length = 8, figures = [], marks = [], onClick = _.noop }) =>
     <div className={style.board}>
         {_.times(length, i => (
             <Row
@@ -12,6 +12,7 @@ const Bord = ({ length = 8, figures = [], marks = [] }) =>
                 length={length}
                 figures={_.filter(figures, { y: i })}
                 marks={_.filter(marks, { y: i })}
+                onClick={onClick}
             />
         )).reverse()}
     </div>;

@@ -1,13 +1,5 @@
-
 import _ from 'lodash';
 
-const emptyBoard = lenght => (
-    (new Array(lenght)).map((_, y) =>
-        (new Array(lenght)).map((_, x) => (
-            { x, y }
-        ))
-    )
-);
 
 const Figure = class {
     constructor(vectors = []) {
@@ -103,11 +95,9 @@ const King = class extends Figure {
 export const board = [
     [new Rook, new Knight, new Bishop, new King, new Queen, new Bishop, new Knight, new Rook].map(type => ({ type, color: 'black' })),
     _.times(8).map(_ => ({ type: new Pawn, color: 'black' })),
-    ..._.times(4).map(e => _.times(8).map(e => ({ type: 'empty' }))),
+    ..._.times(4).map(e => _.times(8)),
     _.times(8).map(_ => ({ type: new Pawn, color: 'white' })),
     [new Rook, new Knight, new Bishop, new King, new Queen, new Bishop, new Knight, new Rook].map(type => ({ type, color: 'white' })),
 ]
     .map((row = [], y) => row.map((square = {}, x) => ({ ...square, x, y })))
     .flat();
-
-// export const board = emptyBoard(8);

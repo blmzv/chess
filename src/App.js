@@ -10,6 +10,7 @@ function App() {
     <Board
       figures={figures}
       marks={(new Pawn).getMovies(figures[10], board)}
+      
     />
   );
 }

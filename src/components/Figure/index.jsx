@@ -12,15 +12,15 @@ import style from './index.module.css';
 
 
 const icons = {
-    pawn: faChessPawn,
-    rook: faChessRook,
-    knight: faChessKnight,
-    bishop: faChessBishop,
-    queen: faChessQueen,
-    king: faChessKing
+    Pawn: faChessPawn,
+    Rook: faChessRook,
+    Knight: faChessKnight,
+    Bishop: faChessBishop,
+    Queen: faChessQueen,
+    King: faChessKing
 };
 
-const Figure = ({ color, type }) =>
-    <FontAwesomeIcon icon={icons[type]} className={`${style.figure} ${style[color]}`} />;
+const Figure = ({ color, type = {} }) =>
+    <FontAwesomeIcon icon={icons[type.constructor.name]} className={`${style.figure} ${style[color]}`} />;
 
 export default Figure;

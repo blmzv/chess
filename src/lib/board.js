@@ -7,27 +7,26 @@ const Figure = class {
     }
 
     getMovies(position, board) {
-        const coordinates = ['x', 'y'];
-        const rel = (zero, item) => coordinates.reduce(
-            (acc, z) => ({ ...acc, [z]: (item[z] - zero[z]) * (zero.color === "black" ? -1 : 1) }),
-            item
-        );
-        const figures = _.filter(board, 'type');
-        const restrictions = (vector = []) =>
-            vector.filter(square =>
-                true || figures.every(figure =>
-                    coordinates.every(z =>
-                        rel(position, square)[z] <= rel(position, figure)[z]
-                    )
-                )
-                //&& _.find(figures, { [z]: square }).color !== color
-            );
+        const rel = (zero, item) => ['x', 'y'].reduce(
+            (acc, z) => {
+                let val = item[z] - zero[z];
 
-        return this.vectors.map(vector =>
-            board.filter(square =>
-                vector(rel(position, square))
-            )
-        ).map(restrictions).flat();
+                if (zero.color === "black") {
+                    val = -1 * val;
+                }
+                return { ...acc, [z]: val };
+            }, item);
+        const figures = _.filter(board, 'type');
+        const toRel = (vector) => (square) => vector(rel(position, square));
+        const restrictions = (vector = []) => {
+            const v = position.color === "black" ? vector.reverse() : vector;
+            const exclOpp = _.takeWhile(v, square => !_.find(figures, square));
+            const incOpp = _.takeWhile(v, square => !_.find(figures, { ...square, color: position.color }));
+
+            return _.take(incOpp, exclOpp.length + 1);
+        };
+
+        return this.vectors.map(toRel).map(v => board.filter(v)).map(restrictions).flat();
     }
 };
 

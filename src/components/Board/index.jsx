@@ -4,10 +4,15 @@ import Row from '../Row';
 import style from './index.module.css';
 
 
-const Bord = ({ length = 8, position = {}, marks={} }) =>
+const Bord = ({ length = 8, figures = [], marks = [] }) =>
     <div className={style.board}>
         {_.times(length, i => (
-            <Row key={`row-${i}`} length={length} position={position[i]} marks={marks[i]} />
+            <Row
+                key={`row-${i}`}
+                length={length}
+                figures={_.filter(figures, { y: i })}
+                marks={_.filter(marks, { y: i })}
+            />
         )).reverse()}
     </div>;
 

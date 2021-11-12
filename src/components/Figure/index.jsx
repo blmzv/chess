@@ -20,7 +20,7 @@ const icons = {
     king: faChessKing
 };
 
-const Figure = ({ color, piece }) =>
-    <FontAwesomeIcon icon={icons[piece]} className={`${style.figure} ${style[color]}`} />;
+const Figure = ({ color, type }) =>
+    <FontAwesomeIcon icon={icons[type]} className={`${style.figure} ${style[color]}`} />;
 
 export default Figure;

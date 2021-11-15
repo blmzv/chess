@@ -18,9 +18,9 @@ const Figure = class {
             }, item);
         const toRel = (vector) => (square) => vector(rel(cheesman, square));
         const orderByCheesman = (a, b) => {
-            const toRel = square => Math.abs(rel(cheesman, square));
+            const toRel = square => _.mapValues(rel(cheesman, square), Math.abs);
 
-            return ['x', 'y'].some(z => toRel(a)[z] > toRel(b)[z]) ? 1 : !1
+            return ['x', 'y'].some(z => toRel(a)[z] > toRel(b)[z]) ? 1 : -1;
         };
         const restrictions = (vector = []) => {
             const exclOpp = _.takeWhile(vector, square => !_.find(position, square));

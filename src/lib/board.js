@@ -6,7 +6,7 @@ const Figure = class {
         this.vectors = vectors;
     }
 
-    getMovies(position, board) {
+    getMovies(cheesman, position, board) {
         const rel = (zero, item) => ['x', 'y'].reduce(
             (acc, z) => {
                 let val = item[z] - zero[z];
@@ -16,17 +16,16 @@ const Figure = class {
                 }
                 return { ...acc, [z]: val };
             }, item);
-        const figures = _.filter(board, 'type');
-        const toRel = (vector) => (square) => vector(rel(position, square));
+        const toRel = (vector) => (square) => vector(rel(cheesman, square));
         const restrictions = (vector = []) => {
-            const v = position.color === "black" ? vector.reverse() : vector;
-            const exclOpp = _.takeWhile(v, square => !_.find(figures, square));
-            const incOpp = _.takeWhile(v, square => !_.find(figures, { ...square, color: position.color }));
+            const v = cheesman.color === "black" ? vector.reverse() : vector;
+            const exclOpp = _.takeWhile(v, square => !_.find(position, square));
+            const incOpp = _.takeWhile(v, square => !_.find(position, { ...square, color: cheesman.color }));
 
             return _.take(incOpp, exclOpp.length + 1);
         };
 
-        return this.vectors.map(toRel).map(v => board.filter(v)).map(restrictions).flat();
+        return this.vectors.map(toRel).map(v => board.flat().filter(v)).map(restrictions).flat();
     }
 };
 
@@ -102,12 +101,23 @@ const King = class extends Figure {
     }
 };
 
-export const board = [
-    [new Rook, new Knight, new Bishop, new King, new Queen, new Bishop, new Knight, new Rook].map(type => ({ type, color: 'white' })),
-    _.times(8).map(_ => ({ type: new Pawn, color: 'white' })),
-    ..._.times(4).map(e => _.times(8)),
-    _.times(8).map(_ => ({ type: new Pawn, color: 'black' })),
-    [new Rook, new Knight, new Bishop, new King, new Queen, new Bishop, new Knight, new Rook].map(type => ({ type, color: 'black' })),
-]
-    .map((row = [], y) => row.map((square = {}, x) => ({ ...square, x, y })))
-    .flat();
+export const Board = (length = 8) => (
+    new Array(length).fill().map((row, y) =>
+        new Array(length).fill().map((cell, x) =>
+            ({ x, y })
+        )
+    )
+)
+
+export const position = _.flattenDeep([
+    [{ y: 0, color: 'white' }, { y: 7, color: 'black' }].map(params =>
+        [new Rook, new Knight, new Bishop, new King, new Queen, new Bishop, new Knight, new Rook].map((type, x) => (
+            { type, x, ...params }
+        ))
+    ),
+    // [{ y: 1, color: 'white' }, { y: 6, color: 'black' }].map(params =>
+    //     new Array(8).fill().map((cell, x) => (
+    //         { x, type: new Pawn, ...params }
+    //     ))
+    // ),
+]);

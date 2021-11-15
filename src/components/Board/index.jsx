@@ -1,20 +1,21 @@
 import _ from 'lodash';
 
+import { Board } from '../../lib/board';
 import Row from '../Row';
 import style from './index.module.css';
 
 
-const Bord = ({ length = 8, figures = [], marks = [], onClick = _.noop }) =>
+const Bord = ({ board = Board(), position = [], marks = [], onClick = _.noop }) =>
     <div className={style.board}>
-        {_.times(length, i => (
+        {board.map((row, y) =>
             <Row
-                key={`row-${i}`}
-                length={length}
-                figures={_.filter(figures, { y: i })}
-                marks={_.filter(marks, { y: i })}
+                key={`row-${y}`}
+                row={row}
+                figures={_.filter(position.flat(), { y })}
+                marks={_.filter(marks, { y })}
                 onClick={onClick}
             />
-        )).reverse()}
+        ).reverse()}
     </div>;
 
 export default Bord;

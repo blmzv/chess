@@ -3,37 +3,56 @@ import { useState } from 'react';
 import _ from 'lodash';
 
 import Board from './components/Board';
-import { board, Pawn } from './lib/board';
+import { position as startPosition, Board as getBoard, Pawn } from './lib/board';
 
 
+// doard/square — набор координат, представляющие пространство шахматной доски
+// squaries — кабор каких-либо клеток на доске. используется редко
+// coordinates/coordinate — координаты x,y
+// cheesman — шахматная фигура относительно которой строится логика / выполняется действие 
+// position — расстановка фигур на доске 
+// figures/figures — набор фигур на доске
+// vectors/vector — набор возможных ходов фигуры в одном направлении
+// movies/move — возможные ходы фигуры
+//
+// doard (-> squaries) ->  square
+// position -> figures -> figures
+// cheesman -> vectors -> vector -> movies -> move
 
-// const figures = ;
-
+const board = getBoard();
 
 const App = () => {
   const [selected, setSelected] = useState();
-  const [figures, setFigures] = useState(board);
+  const [position, setPosition] = useState(startPosition);
   const handleClick = (square) => {
-    if (_.has(selected, 'type')) {
-      setFigures(
-        _(figures)
-        .reject(figure => _.eq(selected, figure))
-        .concat({ ...selected, type: null, })
-        .reject(figure => _.eq(square, figure))
-        .concat({ ...selected, ...square, })        
-        .value()
-      );
+
+    if (selected) {
+      const movies = selected.type.getMovies(selected, position, board);
+
+      if(_.find(movies, square)) {
+        setPosition(
+          _(position)
+          .reject(figure => _.isEqual(figure, selected))
+          .reject(({ x, y }) => _.isEqual({ x, y }, square))
+          .concat({ ...selected, ...square, })        
+          .value()
+        );
+      }
       setSelected();
     } else {
-      setSelected(square);
+      const figure = _.find(position, square);
+
+      if(figure) {
+        setSelected(figure);
+      }
     }
-    
   }
 
   return (
     <Board
-      figures={figures}
-      marks={selected?.type.getMovies(selected, board)}
+      board={board}
+      position={position}
+      marks={selected?.type.getMovies(selected, position, board)}
       onClick={handleClick}
     />
   );

@@ -3,13 +3,14 @@ import _ from 'lodash';
 import Cell from '../Cell';
 
 
-const Row = ({ length, figures = [], marks = [], onClick = _.noop }) =>
+const Row = ({ row, figures = [], marks = [], onClick = _.noop }) =>
     <div>
-        {_.times(length, i =>
+        {row.map((cell, x) =>
             <Cell
-                key={`cell-${i}`}
-                figure={_.find(figures, { x: i })}
-                marks={_.find(marks, { x: i })}
+                key={`cell-${x}`}
+                cell={cell}
+                figure={_.find(figures, { x })}
+                marks={_.find(marks, { x })}
                 onClick={onClick}
             />
         )}

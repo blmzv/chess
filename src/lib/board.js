@@ -17,15 +17,25 @@ const Figure = class {
                 return { ...acc, [z]: val };
             }, item);
         const toRel = (vector) => (square) => vector(rel(cheesman, square));
+        const orderByCheesman = (a, b) => {
+            const toRel = square => Math.abs(rel(cheesman, square));
+
+            return ['x', 'y'].some(z => toRel(a)[z] > toRel(b)[z]) ? 1 : !1
+        };
         const restrictions = (vector = []) => {
-            const v = cheesman.color === "black" ? vector.reverse() : vector;
-            const exclOpp = _.takeWhile(v, square => !_.find(position, square));
-            const incOpp = _.takeWhile(v, square => !_.find(position, { ...square, color: cheesman.color }));
+            const exclOpp = _.takeWhile(vector, square => !_.find(position, square));
+            const incOpp = _.takeWhile(vector, square => !_.find(position, { ...square, color: cheesman.color }));
 
             return _.take(incOpp, exclOpp.length + 1);
         };
 
-        return this.vectors.map(toRel).map(v => board.flat().filter(v)).map(restrictions).flat();
+        return (
+            this.vectors
+                .map(toRel)
+                .map(vector => board.flat().filter(vector).sort(orderByCheesman))
+                .map(restrictions)
+                .flat()
+        );
     }
 };
 
@@ -115,9 +125,9 @@ export const position = _.flattenDeep([
             { type, x, ...params }
         ))
     ),
-    // [{ y: 1, color: 'white' }, { y: 6, color: 'black' }].map(params =>
-    //     new Array(8).fill().map((cell, x) => (
-    //         { x, type: new Pawn, ...params }
-    //     ))
-    // ),
+    [{ y: 1, color: 'white' }, { y: 6, color: 'black' }].map(params =>
+        new Array(8).fill().map((cell, x) => (
+            { x, type: new Pawn, ...params }
+        ))
+    ),
 ]);

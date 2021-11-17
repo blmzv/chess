@@ -2,16 +2,19 @@
     display: grid;
     grid-template-columns: repeat(8, 1fr);
     
-    width: 400px;
-    height: 400px;
+    width: 500px;
+    height: 500px;
 
-    font-size: 100fr;
+    font-size: 2.2rem;
 }
 .board > div {
     display: contents;
 }
+.board {
+    background-color: #BCD1DA;
+}
 .board > div:nth-child(2n) > div:nth-child(2n),
 .board > div:nth-child(2n +1 ) > div:nth-child(2n +1) {
-    background-color: grey;
+    background-color: #5F8899;
     border-radius: 2px;
 }
